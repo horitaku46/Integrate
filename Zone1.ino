@@ -29,8 +29,6 @@ const float colorzone1[9][3] = {
 
 void zone1(){ 
 
-  calcDirection();
-
   int note;
   static unsigned long timePrev1 = 0;
   int diff;

@@ -17,9 +17,6 @@ void zone6() {
     return;
   }
 
-  // Zumoの方向を計測
-  calcDirection();
-
   switch ( mode_G ) {
     case 0: // setup（必要がなくても形式的に置いておく）
       mode_G = 1;

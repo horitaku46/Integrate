@@ -108,4 +108,16 @@ float averageHeading()
   return heading(avg);
 }
 
+// loop関数内で実行しても大丈夫なaverageHeadingのアップデート関数
+float averageHeadingLP() {
+  // avg is the average measure of the magnetic vector.
+  static LSM303::vector<int32_t> avg = {0, 0, 0};
+  
+  compass.read(); // 地磁気の計測
+  avg.x = 0.2*compass.m.x + 0.8*avg.x; // 0.2 と0.8 はパラメーター
+  avg.y = 0.2*compass.m.y + 0.8*avg.y;
+  
+  return heading(avg);
+}
+
 

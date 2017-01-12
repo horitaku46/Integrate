@@ -28,7 +28,6 @@ void zoneToZone() {
   int diff,diff2;
   int e = 4.0;
 
-  calcDirection();
   diff = target1 - direction_G;
   diff2 = direction_exit[zoneNumber_in - 1] - direction_G;
   

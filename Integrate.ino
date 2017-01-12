@@ -37,12 +37,11 @@ LSM303 compass;
 float red_G, green_G, blue_G; // カラーセンサーで読み取ったRGB値（0-100）
 int zoneNumber_G; // ゾーン番号を表す状態変数
 int mode_G; // 各ゾーンでのモードを表す状態変数
-unsigned long timeInit_G, timeNow_G; //  スタート時間，経過時間
-int motorR_G, motorL_G;  // 左右のZumoのモータに与える回転力
-
-// Color キャリブレーション値
+int dataR_max, dataG_max, dataB_max; // Colorキャリブレーション値
 int dataR_min, dataG_min, dataB_min;
-int dataR_max, dataG_max, dataB_max;
+unsigned long timeInit_G, timeNow_G; //  スタート時間，経過時間
+int motorR_G, motorL_G; // 左右のZumoのモータに与える回転力
+float direction_G; // 現在Zumoが向いている方向(0~360)
 
 
 int flagFinish2 = 0; // Line traceing done, Exit zone
@@ -83,9 +82,6 @@ const int power = 13;
 unsigned long interval;
 extern int pattern[3];
 extern int masu[5][5];
-
-// Zone6のグローバル変数
-float direction_G; // 現在Zumoが向いている方向(0~360)
 
 
 // 設定関数
@@ -135,11 +131,11 @@ void loop() {
   readRGB();
   // 経過時間
   timeNow_G = millis() - timeInit_G;
-
+  // Zumoの方向
+  direction_G = averageHeadingLP();
+  
   // 左右モーターへの回転力入力
   motors.setSpeeds(motorL_G, motorR_G);
-  // color test
-  //  motors.setSpeeds(0, 0);
 
   // データ送信
   sendData();
@@ -215,29 +211,23 @@ void sendData() {
     Serial.write(dataB_min & 255);
 
     // 地磁気センサのキャリブレーション値
-    Serial.write(compass.m_max.x >> 8);
-    Serial.write(compass.m_max.x & 255);
-    Serial.write(compass.m_max.y >> 8);
-    Serial.write(compass.m_max.y & 255);
-    Serial.write(compass.m_min.x >> 8);
-    Serial.write(compass.m_min.x & 255);
-    Serial.write(compass.m_min.y >> 8);
-    Serial.write(compass.m_min.y & 255);
+    Serial.write((int)(100*compass.m_max.x) >> 8);
+    Serial.write((int)(100*compass.m_max.x) & 255);
+    Serial.write((int)(100*compass.m_max.y) >> 8);
+    Serial.write((int)(100*compass.m_max.y) & 255);
+    Serial.write((int)(100*compass.m_min.x) >> 8);
+    Serial.write((int)(100*compass.m_min.x) & 255);
+    Serial.write((int)(100*compass.m_min.y) >> 8);
+    Serial.write((int)(100*compass.m_min.y) & 255);
 
     // RGB
     Serial.write((int)red_G);
     Serial.write((int)green_G);
     Serial.write((int)blue_G);
 
-    // モーターの回転速度
-    Serial.write(motorL_G >> 8);
-    Serial.write(motorL_G & 255);
-    Serial.write(motorR_G >> 8);
-    Serial.write(motorR_G & 255);
-
     // Zumoの方向
-    Serial.write((int)(direction_G) >> 8);
-    Serial.write((int)(direction_G) & 255);
+    Serial.write((int)(100*direction_G) >> 8);
+    Serial.write((int)(100*direction_G) & 255);
 
     // Zone4でのポイントで検知した色
     Serial.write((int)detectColor_G);

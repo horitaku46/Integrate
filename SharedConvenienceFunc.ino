@@ -55,19 +55,3 @@ int zoneTimeOver( unsigned long period ) {
 }
 
 
-
-/** 制御周期が長くなるための回避策
- *  averageHeading関数は使わずこれを必要なZoneだけ使う
- */
-void calcDirection() {
-  
-  static unsigned long timePrev = 0;
-  
-  // 50msごとに計測
-  if ( timeNow_G - timePrev > 50 ) {
-    direction_G = averageHeading();
-    timePrev = timeNow_G;
-  }
-}
-
-
