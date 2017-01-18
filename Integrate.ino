@@ -211,14 +211,14 @@ void sendData() {
     Serial.write(dataB_min & 255);
 
     // 地磁気センサのキャリブレーション値
-    Serial.write((int)(100*compass.m_max.x) >> 8);
-    Serial.write((int)(100*compass.m_max.x) & 255);
-    Serial.write((int)(100*compass.m_max.y) >> 8);
-    Serial.write((int)(100*compass.m_max.y) & 255);
-    Serial.write((int)(100*compass.m_min.x) >> 8);
-    Serial.write((int)(100*compass.m_min.x) & 255);
-    Serial.write((int)(100*compass.m_min.y) >> 8);
-    Serial.write((int)(100*compass.m_min.y) & 255);
+    Serial.write(compass.m_max.x >> 8);
+    Serial.write(compass.m_max.x & 255);
+    Serial.write(compass.m_max.y >> 8);
+    Serial.write(compass.m_max.y & 255);
+    Serial.write(compass.m_min.x >> 8);
+    Serial.write(compass.m_min.x & 255);
+    Serial.write(compass.m_min.y >> 8);
+    Serial.write(compass.m_min.y & 255);
 
     // RGB
     Serial.write((int)red_G);
@@ -226,8 +226,8 @@ void sendData() {
     Serial.write((int)blue_G);
 
     // Zumoの方向
-    Serial.write((int)(100*direction_G) >> 8);
-    Serial.write((int)(100*direction_G) & 255);
+    Serial.write((int)(direction_G) >> 8);
+    Serial.write((int)(direction_G) & 255);
 
     // Zone4でのポイントで検知した色
     Serial.write((int)detectColor_G);
